@@ -2,19 +2,20 @@ const express = require("express");
 const app = express();
 const connectDB = require("./db/connect");
 const taskRouter = require("./routes/tasks");
+const notFound = require("./middleware/notFound");
+const errorHandlerMiddleware = require("./middleware/error-handler");
 require("dotenv").config();
 
 //MiddleWare
+app.use(express.static("./public"));
 app.use(express.json());
 
 //Routes
-app.get("/hello", (req, res) => {
-  res.send("Welcome To Productify");
-});
-
 app.use("/api/v1/tasks", taskRouter);
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
