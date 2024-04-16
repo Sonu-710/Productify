@@ -7,7 +7,7 @@ exports.getTask = (req, res) => {
 };
 
 exports.createTask = (req, res) => {
-  res.send("created a task");
+  res.json(req.body);
 };
 
 exports.updateTask = (req, res) => {
