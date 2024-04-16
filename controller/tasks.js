@@ -33,10 +33,27 @@ exports.createTask = async (req, res) => {
   }
 };
 
-exports.updateTask = (req, res) => {
-  res.send("updated");
+exports.deleteTask = async (req, res) => {
+  try {
+    const taskId = req.params.id;
+    const task = await Task.findOneAndDelete({ _id: taskId });
+    if (!task) return res.status(404).json({ Message: "No such task found" });
+    res.status(200).json({ task: null, status: "success" });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
 };
 
-exports.deleteTask = (req, res) => {
-  res.send("Deleted Task");
+exports.updateTask = async (req, res) => {
+  try {
+    const taskId = req.params.id;
+    const task = await Task.findOneAndUpdate({ _id: taskId }, req.body, {
+      runValidators: true,
+      new: true,
+    });
+    if (!task) return res.status(404).json({ Message: "No such task found" });
+    res.status(200).json({ task: task });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
 };
